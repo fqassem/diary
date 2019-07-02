@@ -1,4 +1,5 @@
 var express = require("express");
+var dateFormat = require("dateformat");
 var router = express.Router();
 
 /* Our Mock little database with Model */
@@ -6,11 +7,8 @@ let posts = [];
 function BlogPost(title, content) {
   this.title = title;
   this.content = content;
-  this.datePublished = new Date();
-};
-
-const bp1 = new BlogPost('Hello', 'Lots of stuff');
-posts.push(bp1);
+  this.datePublished = dateFormat(new Date(), "mm-dd-yyyy");
+}
 
 /* GET all Blog Posts */
 router.get("/all", function(req, res, next) {
