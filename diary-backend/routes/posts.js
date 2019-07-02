@@ -21,11 +21,11 @@ router.post("/createPost", function(req, res, next) {
   const { title, content } = body;
   let errors = [];
 
-  if (!body.title || body.title.length == 0) {
+  if (!title || title.length == 0) {
     errors.push("Title is missing");
   }
 
-  if (!body.content || body.content.length == 0) {
+  if (!content || content.length == 0) {
     errors.push("Content is missing");
   }
 
