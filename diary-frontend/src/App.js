@@ -6,6 +6,7 @@ import GlobalStyle from "./globalStyles";
 import { Home, Blog, CreatePost, NotFound } from "./pages";
 
 const SiteContainer = styled.div`
+  display: grid;
   grid-gap: 1rem 4rem;
   padding: 1.5rem 1rem;
   margin: 0 auto;
@@ -18,11 +19,12 @@ const Header = styled.header`
   width: 100%;
   margin: 0 auto;
   text-align: right;
+
   ul {
     list-style-type: none;
     li {
       display: inline-block;
-      margin: 10px;
+      margin: 1rem;
     }
   }
 `;

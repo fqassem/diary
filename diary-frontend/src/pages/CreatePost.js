@@ -43,7 +43,7 @@ const StyledTextEditor = styled(RichTextEditor)`
 `;
 
 const SubmitButton = styled.input`
-  padding: 10px;
+  padding: 1rem;
   border: 1px solid black;
 `;
 
