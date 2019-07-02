@@ -20,7 +20,9 @@ const BlogPostContent = styled.div``;
 const BlogPost = ({ title, content, datePublished }) => (
   <BlogPostWrapper>
     <BlogPostTitle>{title}</BlogPostTitle>
-    <BlogPostDate>Published: <span>{datePublished}</span></BlogPostDate>
+    <BlogPostDate>
+      Published: <span>{datePublished}</span>
+    </BlogPostDate>
     <BlogPostContent>{ReactHtmlParser(content)}</BlogPostContent>
   </BlogPostWrapper>
 );
