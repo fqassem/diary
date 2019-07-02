@@ -2,17 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import RichTextEditor from "react-rte";
 
-const CreatePostWrapper = styled.div`
-  margin: 0 auto;
-  @media (min-width: 40em) {
-    width: 60%;
-  }
-`;
-
-const CreatePostTitle = styled.h2`
-  text-align: center;
-`;
-
 const CreatePostLabel = styled.label`
   display: block;
   margin-bottom: 0.5rem;
@@ -47,7 +36,7 @@ const SubmitButton = styled.input`
   border: 1px solid black;
 `;
 
-class CreatePost extends React.Component {
+class CreatePostForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -88,12 +77,6 @@ class CreatePost extends React.Component {
     );
   };
 
-  handleCaptchaResponseChange = recaptchaCode => {
-    this.setState({
-      recaptchaCode
-    });
-  };
-
   handleFormSubmit = async e => {
     const { title, content, formError } = this.state;
 
@@ -129,64 +112,55 @@ class CreatePost extends React.Component {
   render() {
     const { titleError, contentError } = this.state;
     return (
-      <CreatePostWrapper>
-        <CreatePostTitle>Create an Entry</CreatePostTitle>
-        <form action="#">
-          {titleError && (
-            <CreatePostError>Please enter a title</CreatePostError>
-          )}
-          <CreatePostLabel htmlFor="title">Title</CreatePostLabel>
-          <CreatePostInput
-            type="text"
-            id="title"
-            name="title"
-            placeholder="Title"
-            value={this.state.title}
-            onChange={e => this.setState({ title: e.target.value })}
-          />
+      <form action="#">
+        {titleError && <CreatePostError>Please enter a title</CreatePostError>}
+        <CreatePostLabel htmlFor="title">Title</CreatePostLabel>
+        <CreatePostInput
+          type="text"
+          id="title"
+          name="title"
+          placeholder="Title"
+          value={this.state.title}
+          onChange={e => this.setState({ title: e.target.value })}
+        />
 
-          {contentError && (
-            <CreatePostError>
-              Please enter some content for the post
-            </CreatePostError>
-          )}
-          <CreatePostLabel htmlFor="message">Content</CreatePostLabel>
-          <StyledTextEditor
-            id="content"
-            name="content"
-            value={this.state.content}
-            onChange={value => this.setState({ content: value })}
-          />
+        {contentError && (
+          <CreatePostError>
+            Please enter some content for the post
+          </CreatePostError>
+        )}
+        <CreatePostLabel htmlFor="message">Content</CreatePostLabel>
+        <StyledTextEditor
+          id="content"
+          name="content"
+          value={this.state.content}
+          onChange={value => this.setState({ content: value })}
+        />
 
+        <div>
           <div>
-            <div>
-              {this.state.error && (
-                <CreatePostError>
-                  An error occurred while creating your post. Please try again.
-                </CreatePostError>
-              )}
-            </div>
-
-            {this.state.formError && (
+            {this.state.error && (
               <CreatePostError>
-                Please fix the form errors above.
+                An error occurred while creating your post. Please try again.
               </CreatePostError>
             )}
-            <div>
-              <SubmitButton
-                type="submit"
-                onClick={e => this.validateForm(e)}
-                value="Send"
-                disabled={
-                  this.state.sending || this.state.sent || this.formError
-                }
-              />
-            </div>
           </div>
-        </form>
-      </CreatePostWrapper>
+
+          {this.state.formError && (
+            <CreatePostError>Please fix the form errors above.</CreatePostError>
+          )}
+          <div>
+            <SubmitButton
+              type="submit"
+              onClick={e => this.validateForm(e)}
+              value="Send"
+              disabled={this.state.sending || this.state.sent || this.formError}
+            />
+          </div>
+        </div>
+      </form>
     );
   }
 }
 
-export default CreatePost;
+export default CreatePostForm;

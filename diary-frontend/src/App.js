@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Menu from './components/Menu';
+import * as routes from './constants/routes';
 
 import GlobalStyle from "./globalStyles";
 import { Home, Blog, CreatePost, NotFound } from "./pages";
@@ -16,32 +18,7 @@ const SiteContainer = styled.div`
 `;
 
 const Header = styled.header`
-  width: 100%;
-  margin: 0 auto;
-  text-align: right;
-
-  ul {
-    list-style-type: none;
-    li {
-      display: inline-block;
-      margin: 1rem;
-    }
-  }
 `;
-
-const Menu = () => (
-  <ul>
-    <li>
-      <Link to="/">Home</Link>
-    </li>
-    <li>
-      <Link to="/blog">Blog</Link>
-    </li>
-    <li>
-      <Link to="/create">Create Post</Link>
-    </li>
-  </ul>
-);
 
 const App = () => {
   return (
@@ -52,9 +29,9 @@ const App = () => {
           <Menu />
         </Header>
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/blog" component={Blog} />
-          <Route path="/create" component={CreatePost} />
+          <Route exact path={routes.HOME} component={Home} />
+          <Route path={routes.BLOG} component={Blog} />
+          <Route path={routes.CREATE} component={CreatePost} />
           <Route component={NotFound} />
         </Switch>
       </SiteContainer>
