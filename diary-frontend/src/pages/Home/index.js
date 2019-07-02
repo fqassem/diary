@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 const HomeWrapper = styled.div``;
 
@@ -18,8 +17,7 @@ class Home extends React.Component {
       <HomeWrapper>
         <Header>Welcome to Your Diary</Header>
         <FrontPageContent>
-          Here, you can <Link to="/create">create</Link> and{" "}
-          <Link to="/blog">read your previous diary entries</Link> to your
+          Here, you can create and read your previous diary entries to your 
           heart's content
         </FrontPageContent>
       </HomeWrapper>

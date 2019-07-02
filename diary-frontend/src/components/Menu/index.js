@@ -17,18 +17,29 @@ const MenuItem = styled.li`
   margin: 1rem;
 `;
 
-const Menu = () => (
+const Menu = ({ authUser }) => (
   <MenuWrapper>
     <MenuList>
-      <MenuItem>
-        <Link to={routes.SIGN_IN}>Sign In</Link>
-      </MenuItem>
-      <MenuItem>
-        <Link to={routes.BLOG}>Blog</Link>
-      </MenuItem>
-      <MenuItem>
-        <Link to={routes.CREATE}>Create Post</Link>
-      </MenuItem>
+      {!authUser && (
+        <>
+          <MenuItem>
+            <Link to={routes.HOME}>Home</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to={routes.SIGN_IN}>Sign In</Link>
+          </MenuItem>
+        </>
+      )}
+      {authUser && (
+        <>
+          <MenuItem>
+            <Link to={routes.BLOG}>Blog</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to={routes.CREATE}>Create Post</Link>
+          </MenuItem>
+        </>
+      )}
     </MenuList>
   </MenuWrapper>
 );
