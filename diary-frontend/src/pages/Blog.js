@@ -1,12 +1,12 @@
 import React from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 import BlogPost from "../components/BlogPost";
 
-const BlogPostWrapper = styled.div`
-`;
+const BlogPostWrapper = styled.div``;
 
 const BlogPostList = styled.ul`
   list-style-type: none;
+  padding-left: 0;
 
   li {
     margin: 2rem;
@@ -34,20 +34,21 @@ class Blog extends React.Component {
     const { posts, error } = this.state;
     return (
       <BlogPostWrapper>
-      <BlogPostList>
-        {error ? (
-          <div>{error}</div>
-        ) : (
-          posts.map(post => (
-            <li>
-              <BlogPost
-                title={post.title}
-                content={post.content}
-                datePublished={post.datePublished}
-              />
-            </li>
-          ))
-        )}
+        <h2>Your Blog</h2>
+        <BlogPostList>
+          {error ? (
+            <div>{error}</div>
+          ) : (
+            posts.map(post => (
+              <li>
+                <BlogPost
+                  title={post.title}
+                  content={post.content}
+                  datePublished={post.datePublished}
+                />
+              </li>
+            ))
+          )}
         </BlogPostList>
       </BlogPostWrapper>
     );

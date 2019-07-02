@@ -1,4 +1,19 @@
 import React from "react";
+import styled from "styled-components";
+
+const CreatePostWrapper = styled.div``;
+const CreatePostLabel = styled.label`
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+`;
+
+const CreatePostTitleInput = styled.input`
+  width: 50%;
+  min-width: 250px;
+  max-width: 600px;
+  margin-bottom: 1rem;
+`;
 
 class CreatePost extends React.Component {
   constructor(props) {
@@ -79,15 +94,16 @@ class CreatePost extends React.Component {
   render() {
     const { titleError, contentError } = this.state;
     return (
-      <div>
+      <CreatePostWrapper>
+        <h2>Create A Post</h2>
         <form action="#">
           {titleError && (
             <div>
               <span>Please enter a title</span>
             </div>
           )}
-          <label htmlFor="title">Title</label>
-          <input
+          <CreatePostLabel htmlFor="title">Title</CreatePostLabel>
+          <CreatePostTitleInput
             type="text"
             id="title"
             name="title"
@@ -101,7 +117,7 @@ class CreatePost extends React.Component {
               <span>Please enter some content for the post</span>
             </div>
           )}
-          <label htmlFor="message">Content</label>
+          <CreatePostLabel htmlFor="message">Content</CreatePostLabel>
           <textarea
             id="content"
             name="content"
@@ -134,7 +150,7 @@ class CreatePost extends React.Component {
             </div>
           </div>
         </form>
-      </div>
+      </CreatePostWrapper>
     );
   }
 }
