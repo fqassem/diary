@@ -1,5 +1,17 @@
 import React from "react";
+import styled from 'styled-components';
 import BlogPost from "../components/BlogPost";
+
+const BlogPostWrapper = styled.div`
+`;
+
+const BlogPostList = styled.ul`
+  list-style-type: none;
+
+  li {
+    margin: 2rem;
+  }
+`;
 
 class Blog extends React.Component {
   constructor(props) {
@@ -21,7 +33,8 @@ class Blog extends React.Component {
   render() {
     const { posts, error } = this.state;
     return (
-      <ul>
+      <BlogPostWrapper>
+      <BlogPostList>
         {error ? (
           <div>{error}</div>
         ) : (
@@ -35,7 +48,8 @@ class Blog extends React.Component {
             </li>
           ))
         )}
-      </ul>
+        </BlogPostList>
+      </BlogPostWrapper>
     );
   }
 }

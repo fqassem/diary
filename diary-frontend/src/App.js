@@ -1,6 +1,31 @@
 import React from "react";
+import styled from "styled-components";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+
+import GlobalStyle from "./globalStyles";
 import { Home, Blog, CreatePost, NotFound } from "./pages";
+
+const SiteContainer = styled.div`
+  grid-gap: 1rem 4rem;
+  padding: 1.5rem 1rem;
+  margin: 0 auto;
+  grid-template-columns: 1fr;
+
+  max-width: 60em;
+`;
+
+const Header = styled.header`
+  width: 100%;
+  margin: 0 auto;
+  text-align: right;
+  ul {
+    list-style-type: none;
+    li {
+      display: inline-block;
+      margin: 10px;
+    }
+  }
+`;
 
 const Menu = () => (
   <ul>
@@ -19,18 +44,18 @@ const Menu = () => (
 const App = () => {
   return (
     <Router>
-      <div>
-        <header>
+      <GlobalStyle />
+      <SiteContainer>
+        <Header>
           <Menu />
-        </header>
-
+        </Header>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/blog" component={Blog} />
           <Route path="/create" component={CreatePost} />
           <Route component={NotFound} />
         </Switch>
-      </div>
+      </SiteContainer>
     </Router>
   );
 };
