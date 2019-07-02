@@ -6,6 +6,10 @@ import BlogPost from "../components/BlogPost";
 
 const BlogPostWrapper = styled.div``;
 
+const BlogPostTitle = styled.h2`
+  text-align: center;
+`;
+
 const BlogPostList = styled.ul`
   list-style-type: none;
   padding-left: 0;
@@ -36,7 +40,7 @@ class Blog extends React.Component {
     const { posts, error } = this.state;
     return (
       <BlogPostWrapper>
-        <h2>Your Blog</h2>
+        <BlogPostTitle>Your Blog</BlogPostTitle>
         {error && <div>{error}</div>}
         {posts.length === 0 ? (
           <div>

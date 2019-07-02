@@ -9,6 +9,10 @@ const CreatePostWrapper = styled.div`
   }
 `;
 
+const CreatePostTitle = styled.h2`
+  text-align: center;
+`;
+
 const CreatePostLabel = styled.label`
   display: block;
   margin-bottom: 0.5rem;
@@ -118,7 +122,7 @@ class CreatePost extends React.Component {
     const { titleError, contentError } = this.state;
     return (
       <CreatePostWrapper>
-        <h2>Create A Post</h2>
+        <CreatePostTitle>Create A Post</CreatePostTitle>
         <form action="#">
           {titleError && (
             <CreatePostError>Please enter a title</CreatePostError>
