@@ -16,15 +16,13 @@ class Firebase {
     this.auth = firebaseAPI.auth();
   }
 
-  signIn = (email, password) => {
+  signIn = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
-  };
 
   signOut = () => this.auth.signOut();
 
-  signUp = (email, password) => {
+  signUp = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
-  };
 }
 
 const FirebaseSingleton = new Firebase();

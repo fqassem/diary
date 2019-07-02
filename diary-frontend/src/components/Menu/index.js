@@ -17,7 +17,13 @@ const MenuItem = styled.li`
   margin: 1rem;
 `;
 
-const Menu = ({ authUser }) => (
+const SignOutButton = ({ onClick }) => (
+  <button type="button" onClick={onClick}>
+    Sign Out
+  </button>
+);
+
+const Menu = ({ authUser, onSignOut }) => (
   <MenuWrapper>
     <MenuList>
       {!authUser && (
@@ -37,6 +43,9 @@ const Menu = ({ authUser }) => (
           </MenuItem>
           <MenuItem>
             <Link to={routes.CREATE}>Create Post</Link>
+          </MenuItem>
+          <MenuItem>
+            <SignOutButton onClick={onSignOut} />
           </MenuItem>
         </>
       )}

@@ -80,7 +80,6 @@ class SignInForm extends React.Component {
       firebase
         .signIn(email, password)
         .then(() => {
-          // this.setState({ ...INITIAL_STATE });
           this.props.history.push(BLOG);
         })
         .catch(error => {

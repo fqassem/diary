@@ -7,6 +7,7 @@ import SignInForm from "./SignInForm";
 
 const SignInWrapper = styled.div`
   margin: 0 auto;
+  width: 100%;
   @media (min-width: 40em) {
     width: 60%;
   }

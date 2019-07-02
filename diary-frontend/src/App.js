@@ -1,8 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
 
-import firebase from './firebase';
+import firebase from "./firebase";
 import GlobalStyle from "./globalStyles";
 import * as routes from "./constants/routes";
 import { SignIn, SignUp, Home, Blog, CreatePost, NotFound } from "./pages";
@@ -39,6 +44,24 @@ const AuthenticatedRoute = ({ component: Component, authUser, ...rest }) => (
   />
 );
 
+const RedirectIfAuthed = ({ component: Component, authUser, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      authUser ? (
+        <Redirect
+          to={{
+            pathname: routes.BLOG,
+            state: { from: props.location }
+          }}
+        />
+      ) : (
+        <Component {...props} />
+      )
+    }
+  />
+);
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -64,12 +87,27 @@ class App extends React.Component {
         <GlobalStyle />
         <SiteContainer>
           <Header>
-            <Menu  authUser={authUser} />
+            <Menu authUser={authUser} onSignOut={firebase.signOut} />
           </Header>
           <Switch>
-            <Route exact path={routes.HOME} component={Home} />
-            <Route exact path={routes.SIGN_IN} component={SignIn} />
-            <Route exact path={routes.SIGN_UP} component={SignUp} />
+            <RedirectIfAuthed
+              exact
+              authUser={authUser}
+              path={routes.HOME}
+              component={Home}
+            />
+            <RedirectIfAuthed
+              exact
+              authUser={authUser}
+              path={routes.SIGN_IN}
+              component={SignIn}
+            />
+            <RedirectIfAuthed
+              exact
+              authUser={authUser}
+              path={routes.SIGN_UP}
+              component={SignUp}
+            />
             <AuthenticatedRoute
               authUser={authUser}
               path={routes.BLOG}

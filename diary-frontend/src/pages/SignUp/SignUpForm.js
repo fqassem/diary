@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import firebase from "../../firebase";
+import { SIGN_IN } from '../../constants/routes';
 
 const SignUpLabel = styled.label`
   display: block;
@@ -84,8 +85,13 @@ class SignUpForm extends React.Component {
     if (!formError) {
       this.setState({ formError: false, sending: true });
 
-      firebase.SignUp(email, password);
-      this.setState({ sent: false, sending: false, error: error.message });
+      firebase.signUp(email, password)
+      .then(authUser => {
+        this.props.history.push(SIGN_IN);
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
     }
   };
 
