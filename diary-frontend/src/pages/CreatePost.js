@@ -35,11 +35,16 @@ const CreatePostInput = styled.input`
 `;
 
 const StyledTextEditor = styled(RichTextEditor)`
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 
   .DraftEditor-root {
     min-height: 110px;
   }
+`;
+
+const SubmitButton = styled.input`
+  padding: 10px;
+  border: 1px solid black;
 `;
 
 class CreatePost extends React.Component {
@@ -67,7 +72,10 @@ class CreatePost extends React.Component {
     const { title, content } = this.state;
 
     const titleError = title.trim().length <= 0;
-    const contentError = !content.getEditorState().getCurrentContent().hasText();
+    const contentError = !content
+      .getEditorState()
+      .getCurrentContent()
+      .hasText();
     const formError = titleError || contentError;
 
     this.setState(
@@ -122,7 +130,7 @@ class CreatePost extends React.Component {
     const { titleError, contentError } = this.state;
     return (
       <CreatePostWrapper>
-        <CreatePostTitle>Create A Post</CreatePostTitle>
+        <CreatePostTitle>Create an Entry</CreatePostTitle>
         <form action="#">
           {titleError && (
             <CreatePostError>Please enter a title</CreatePostError>
@@ -165,7 +173,7 @@ class CreatePost extends React.Component {
               </CreatePostError>
             )}
             <div>
-              <input
+              <SubmitButton
                 type="submit"
                 onClick={e => this.validateForm(e)}
                 value="Send"

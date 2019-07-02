@@ -40,7 +40,7 @@ class Blog extends React.Component {
     const { posts, error } = this.state;
     return (
       <BlogPostWrapper>
-        <BlogPostTitle>Your Blog</BlogPostTitle>
+        <BlogPostTitle>My Diary</BlogPostTitle>
         {error && <div>{error}</div>}
         {posts.length === 0 ? (
           <div>
