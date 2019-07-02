@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import firebase from '../../firebase';
+import firebase from "../../firebase";
+import { BLOG } from '../../constants/routes';
 
 const SignInLabel = styled.label`
   display: block;
@@ -29,17 +30,17 @@ const SubmitButton = styled.input`
 `;
 
 const INITIAL_STATE = {
-    title: "",
-    titleError: false,
+  email: "",
+  emailError: false,
 
-    password: "",
-    passwordError: false,
+  password: "",
+  passwordError: false,
 
-    formError: false,
+  formError: false,
 
-    sent: false,
-    sending: false,
-    error: null
+  sent: false,
+  sending: false,
+  error: null
 };
 
 class SignInForm extends React.Component {
@@ -47,14 +48,17 @@ class SignInForm extends React.Component {
     super(props);
 
     this.state = {
-        ...INITIAL_STATE
+      ...INITIAL_STATE
     };
   }
 
   validateForm = e => {
     e.preventDefault();
-    const { email, password, emailError, passwordError } = this.state;
+    const { email, password } = this.state;
+    
     // do some validation here
+    const emailError = email.length <= 0 || !email.includes("@");
+    const passwordError = password.length <= 6;
     const formError = emailError || passwordError;
 
     this.setState(
@@ -73,10 +77,15 @@ class SignInForm extends React.Component {
     if (!formError) {
       this.setState({ formError: false, sending: true });
 
-          firebase 
-          .signIn(email, password);
-        this.setState({ sent: false, sending: false, error: error.message });
-      
+      firebase
+        .signIn(email, password)
+        .then(() => {
+          // this.setState({ ...INITIAL_STATE });
+          this.props.history.push(BLOG);
+        })
+        .catch(error => {
+          this.setState({ error });
+        });
     }
   };
 
@@ -85,7 +94,7 @@ class SignInForm extends React.Component {
     return (
       <form action="#">
         {emailError && <SignInError>Please enter a valid email</SignInError>}
-        <SignInLabel htmlFor="email">Username</SignInLabel>
+        <SignInLabel htmlFor="email">Email</SignInLabel>
         <SignInInput
           type="email"
           id="email"
@@ -96,9 +105,9 @@ class SignInForm extends React.Component {
         />
 
         {passwordError && (
-          <SignInError>Please enter a valid password</SignInError>
+          <SignInError>Please enter a valid password greater than 6 characters</SignInError>
         )}
-        <SignInLabel htmlFor="title">Username</SignInLabel>
+        <SignInLabel htmlFor="password">Password</SignInLabel>
         <SignInInput
           type="password"
           id="password"

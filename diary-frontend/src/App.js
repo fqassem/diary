@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import firebase from './firebase';
 import GlobalStyle from "./globalStyles";
 import * as routes from "./constants/routes";
-import { SignIn, Home, Blog, CreatePost, NotFound } from "./pages";
+import { SignIn, SignUp, Home, Blog, CreatePost, NotFound } from "./pages";
 
 import Menu from "./components/Menu";
 
@@ -69,6 +69,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path={routes.HOME} component={Home} />
             <Route exact path={routes.SIGN_IN} component={SignIn} />
+            <Route exact path={routes.SIGN_UP} component={SignUp} />
             <AuthenticatedRoute
               authUser={authUser}
               path={routes.BLOG}

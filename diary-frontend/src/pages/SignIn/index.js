@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+
+import { SIGN_UP } from "../../constants/routes";
 import SignInForm from "./SignInForm";
 
 const SignInWrapper = styled.div`
@@ -18,6 +21,9 @@ class SignIn extends React.Component {
     return (
       <SignInWrapper>
         <SignInTitle>Sign In</SignInTitle>
+        <div>
+          Don't have an account? <Link to={SIGN_UP}>Create one!</Link>
+        </div>
         <SignInForm />
       </SignInWrapper>
     );

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import firebase from "../../firebase";
 
 const SignUpLabel = styled.label`
   display: block;
@@ -28,17 +29,20 @@ const SubmitButton = styled.input`
 `;
 
 const INITIAL_STATE = {
-    title: "",
-    titleError: false,
+  email: "",
+  emalError: false,
 
-    password: "",
-    passwordError: false,
+  password: "",
+  passwordError: false,
 
-    formError: false,
+  confirmPassword: "",
+  confirmPasswordError: false,
 
-    sent: false,
-    sending: false,
-    error: null
+  formError: false,
+
+  sent: false,
+  sending: false,
+  error: null
 };
 
 class SignUpForm extends React.Component {
@@ -46,20 +50,28 @@ class SignUpForm extends React.Component {
     super(props);
 
     this.state = {
-        ...INITIAL_STATE
+      ...INITIAL_STATE
     };
   }
 
   validateForm = e => {
     e.preventDefault();
-    const { email, password } = this.state;
+    const {
+      email,
+      password,
+      confirmPassword,
+      emailError,
+      passwordError,
+      confirmPasswordError
+    } = this.state;
     // do some validation here
-    const formError = emailError || passwordError;
+    const formError = emailError || passwordError || confirmPasswordError;
 
     this.setState(
       {
         emailError,
-        contentError,
+        passwordError,
+        confirmPasswordError,
         formError
       },
       e => this.handleFormSubmit(e)
@@ -67,19 +79,18 @@ class SignUpForm extends React.Component {
   };
 
   handleFormSubmit = async e => {
-    const { email, password, formError } = this.state;
+    const { email, password, formError, error } = this.state;
 
     if (!formError) {
       this.setState({ formError: false, sending: true });
 
-          firebase 
-          .SignUp(email, password);
-        this.setState({ sent: false, sending: false, error: error.message });
-      
+      firebase.SignUp(email, password);
+      this.setState({ sent: false, sending: false, error: error.message });
     }
   };
 
   render() {
+    const { emailError, passwordError, confirmPasswordError} = this.state;
     return (
       <form action="#">
         {emailError && <SignUpError>Please enter a valid email</SignUpError>}
@@ -96,7 +107,7 @@ class SignUpForm extends React.Component {
         {passwordError && (
           <SignUpError>Please enter a valid password</SignUpError>
         )}
-        <SignUpLabel htmlFor="title">Username</SignUpLabel>
+        <SignUpLabel htmlFor="password">Password</SignUpLabel>
         <SignUpInput
           type="password"
           id="password"
@@ -106,11 +117,25 @@ class SignUpForm extends React.Component {
           onChange={e => this.setState({ password: e.target.value })}
         />
 
+
+        {confirmPasswordError && (
+          <SignUpError>Your password doesn't match</SignUpError>
+        )}
+        <SignUpLabel htmlFor="password">Confirm Password</SignUpLabel>
+        <SignUpInput
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={this.state.confirmPassword}
+          onChange={e => this.setState({ confirmPassword: e.target.value })}
+        />
+
         <div>
           <div>
             {this.state.error && (
               <SignUpError>
-                An error occurred while SignUpg you in. Please try again.
+                An error occurred while signing you in. Please try again.
               </SignUpError>
             )}
           </div>
