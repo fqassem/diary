@@ -1,18 +1,32 @@
 import React from "react";
 import styled from "styled-components";
 
-const CreatePostWrapper = styled.div``;
+const CreatePostWrapper = styled.div`
+  margin: 0 auto;
+  @media (min-width: 40em) {
+    width: 60%;
+  }
+`;
+
 const CreatePostLabel = styled.label`
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
 `;
 
-const CreatePostTitleInput = styled.input`
-  width: 50%;
-  min-width: 250px;
-  max-width: 600px;
+const CreatePostError = styled.p`
+  color: red;
+  margin: 1rem 0;
+`;
+
+const CreatePostInput = styled.input`
+  width: 100%;
   margin-bottom: 1rem;
+
+  @media (min-width: 40em) {
+    min-width: 250px;
+    max-width: 600px;
+  }
 `;
 
 class CreatePost extends React.Component {
@@ -98,12 +112,10 @@ class CreatePost extends React.Component {
         <h2>Create A Post</h2>
         <form action="#">
           {titleError && (
-            <div>
-              <span>Please enter a title</span>
-            </div>
+              <CreatePostError>Please enter a title</CreatePostError>
           )}
           <CreatePostLabel htmlFor="title">Title</CreatePostLabel>
-          <CreatePostTitleInput
+          <CreatePostInput
             type="text"
             id="title"
             name="title"
@@ -113,12 +125,13 @@ class CreatePost extends React.Component {
           />
 
           {contentError && (
-            <div>
-              <span>Please enter some content for the post</span>
-            </div>
+            <CreatePostError>
+              Please enter some content for the post
+            </CreatePostError>
           )}
           <CreatePostLabel htmlFor="message">Content</CreatePostLabel>
-          <textarea
+          <CreatePostInput
+            as="textarea"
             id="content"
             name="content"
             placeholder="Enter your content here"
@@ -128,16 +141,14 @@ class CreatePost extends React.Component {
 
           <div>
             <div>
-              {this.state.sending && <p>Sending...</p>}
-              {this.state.sent && <p>Your post was successful!</p>}
               {this.state.error && (
-                <p>
+                <CreatePostError>
                   An error occurred while creating your post. Please try again.
-                </p>
+                </CreatePostError>
               )}
             </div>
 
-            {this.state.formError && <p>Please fix the form errors above.</p>}
+            {this.state.formError && <CreatePostError>Please fix the form errors above.</CreatePostError>}
             <div>
               <input
                 type="submit"
