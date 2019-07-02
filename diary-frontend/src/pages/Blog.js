@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+
 import BlogPost from "../components/BlogPost";
 
 const BlogPostWrapper = styled.div``;
@@ -35,21 +37,25 @@ class Blog extends React.Component {
     return (
       <BlogPostWrapper>
         <h2>Your Blog</h2>
-        <BlogPostList>
-          {error ? (
-            <div>{error}</div>
-          ) : (
-            posts.map(post => (
-              <li>
+        {error && <div>{error}</div>}
+        {posts.length === 0 ? (
+          <div>
+            You have no posts! <Link to="/create">Write a Post</Link>
+          </div>
+        ) : (
+          <BlogPostList>
+            {/* // Index is fine as key since this list doesn't change except when remounted */}
+            {posts.map((post, idx) => (
+              <li key={idx}>
                 <BlogPost
                   title={post.title}
                   content={post.content}
                   datePublished={post.datePublished}
                 />
               </li>
-            ))
-          )}
-        </BlogPostList>
+            ))}
+          </BlogPostList>
+        )}
       </BlogPostWrapper>
     );
   }

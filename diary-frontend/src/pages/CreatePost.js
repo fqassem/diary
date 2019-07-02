@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import RichTextEditor from "react-rte";
 
 const CreatePostWrapper = styled.div`
   margin: 0 auto;
@@ -29,6 +30,14 @@ const CreatePostInput = styled.input`
   }
 `;
 
+const StyledTextEditor = styled(RichTextEditor)`
+  margin-bottom: 1rem;
+
+  .DraftEditor-root {
+    min-height: 110px;
+  }
+`;
+
 class CreatePost extends React.Component {
   constructor(props) {
     super(props);
@@ -37,7 +46,7 @@ class CreatePost extends React.Component {
       title: "",
       titleError: false,
 
-      content: "",
+      content: RichTextEditor.createEmptyValue(),
       contentError: false,
 
       formError: false,
@@ -54,7 +63,7 @@ class CreatePost extends React.Component {
     const { title, content } = this.state;
 
     const titleError = title.trim().length <= 0;
-    const contentError = content.trim().length <= 0;
+    const contentError = !content.getEditorState().getCurrentContent().hasText();
     const formError = titleError || contentError;
 
     this.setState(
@@ -79,7 +88,7 @@ class CreatePost extends React.Component {
     if (!formError) {
       const formData = {
         title: title.trim(),
-        content: content.trim()
+        content: content.toString("html")
       };
 
       this.setState({ formError: false, sending: true });
@@ -112,14 +121,14 @@ class CreatePost extends React.Component {
         <h2>Create A Post</h2>
         <form action="#">
           {titleError && (
-              <CreatePostError>Please enter a title</CreatePostError>
+            <CreatePostError>Please enter a title</CreatePostError>
           )}
           <CreatePostLabel htmlFor="title">Title</CreatePostLabel>
           <CreatePostInput
             type="text"
             id="title"
             name="title"
-            placeholder="title"
+            placeholder="Title"
             value={this.state.title}
             onChange={e => this.setState({ title: e.target.value })}
           />
@@ -130,13 +139,11 @@ class CreatePost extends React.Component {
             </CreatePostError>
           )}
           <CreatePostLabel htmlFor="message">Content</CreatePostLabel>
-          <CreatePostInput
-            as="textarea"
+          <StyledTextEditor
             id="content"
             name="content"
-            placeholder="Enter your content here"
-            onChange={e => this.setState({ content: e.target.value })}
             value={this.state.content}
+            onChange={value => this.setState({ content: value })}
           />
 
           <div>
@@ -148,7 +155,11 @@ class CreatePost extends React.Component {
               )}
             </div>
 
-            {this.state.formError && <CreatePostError>Please fix the form errors above.</CreatePostError>}
+            {this.state.formError && (
+              <CreatePostError>
+                Please fix the form errors above.
+              </CreatePostError>
+            )}
             <div>
               <input
                 type="submit"
