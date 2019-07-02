@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 
 class CreatePost extends React.Component {
   constructor(props) {
@@ -66,15 +67,7 @@ class CreatePost extends React.Component {
         });
 
         if (response.ok) {
-          this.setState({
-            sent: true,
-            sending: false,
-            error: null,
-            name: "",
-            email: "",
-            subject: "",
-            message: ""
-          });
+          return this.props.history.push("/blog");
         } else {
           throw new Error("Could not create post");
         }
