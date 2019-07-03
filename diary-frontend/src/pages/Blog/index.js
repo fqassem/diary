@@ -34,7 +34,8 @@ class Blog extends React.Component {
 
     this.state = {
       posts: [],
-      error: null
+      error: null,
+      loading: true
     };
 
     this.postsRef = firebase.getCollection("posts");
@@ -55,16 +56,18 @@ class Blog extends React.Component {
         this.setState({
           error: error.toString()
         })
-      );
+      )
+      .finally(() => this.setState({ loading: false }));
   }
 
   render() {
-    const { posts, error } = this.state;
+    const { posts, error, loading } = this.state;
     return (
       <BlogPostWrapper>
         <BlogPostTitle>My Diary</BlogPostTitle>
         {error && <div>{error}</div>}
-        {posts.length === 0 ? (
+        { loading ? <div>Loading</div> : 
+        posts.length === 0 ? (
           <div>
             You have no posts! <Link to="/create">Write a Post</Link>
           </div>
