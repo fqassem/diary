@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
+import firebase from "../../firebase";
 import BlogPost from "../../components/BlogPost";
 
 const BlogPostWrapper = styled.div``;
@@ -19,6 +19,15 @@ const BlogPostList = styled.ul`
   }
 `;
 
+const formatDate = timestamp => {
+  return timestamp.toDate().toLocaleDateString("en-EN", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+};
+
 class Blog extends React.Component {
   constructor(props) {
     super(props);
@@ -27,13 +36,26 @@ class Blog extends React.Component {
       posts: [],
       error: null
     };
+
+    this.postsRef = firebase.getCollection("posts");
   }
 
   componentDidMount() {
-    fetch("/posts/all")
-      .then(response => response.json())
-      .then(data => this.setState({ posts: data.posts }))
-      .catch(error => this.setState({ error: "Failed to fetch posts" }));
+    this.postsRef
+      .get()
+      .then(querySnapshot => {
+        const allPosts = querySnapshot.docs.map(doc => {
+          return Object.assign({}, doc.data(), { id: doc.id });
+        });
+        this.setState({
+          posts: allPosts
+        });
+      })
+      .catch(error =>
+        this.setState({
+          error: error.toString()
+        })
+      );
   }
 
   render() {
@@ -54,7 +76,9 @@ class Blog extends React.Component {
                 <BlogPost
                   title={post.title}
                   content={post.content}
-                  datePublished={post.datePublished}
+                  datePublished={
+                    post.timestamp ? formatDate(post.timestamp) : "..."
+                  }
                 />
               </li>
             ))}

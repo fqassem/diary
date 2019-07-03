@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
+
 import firebase from "../../firebase";
-import { SIGN_IN } from '../../constants/routes';
+import { SIGN_IN } from "../../constants/routes";
 
 const SignUpLabel = styled.label`
   display: block;
@@ -85,18 +87,19 @@ class SignUpForm extends React.Component {
     if (!formError) {
       this.setState({ formError: false, sending: true });
 
-      firebase.signUp(email, password)
-      .then(authUser => {
-        this.props.history.push(SIGN_IN);
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
+      firebase
+        .signUp(email, password)
+        .then(authUser => {
+          this.props.history.push(SIGN_IN);
+        })
+        .catch(error => {
+          this.setState({ error });
+        });
     }
   };
 
   render() {
-    const { emailError, passwordError, confirmPasswordError} = this.state;
+    const { emailError, passwordError, confirmPasswordError } = this.state;
     return (
       <form action="#">
         {emailError && <SignUpError>Please enter a valid email</SignUpError>}
@@ -122,7 +125,6 @@ class SignUpForm extends React.Component {
           value={this.state.password}
           onChange={e => this.setState({ password: e.target.value })}
         />
-
 
         {confirmPasswordError && (
           <SignUpError>Your password doesn't match</SignUpError>
@@ -163,4 +165,5 @@ class SignUpForm extends React.Component {
   }
 }
 
-export default SignUpForm;
+export { SignUpForm };
+export default withRouter(SignUpForm);

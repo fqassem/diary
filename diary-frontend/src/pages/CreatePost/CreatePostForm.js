@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { withRouter } from 'react-router-dom';
+
 import RichTextEditor from "react-rte";
+import firebase from '../../firebase';
 
 const CreatePostLabel = styled.label`
   display: block;
@@ -53,6 +56,8 @@ class CreatePostForm extends React.Component {
       sending: false,
       error: null
     };
+
+    this.blogPostRef = firebase.getCollection("posts");
   }
 
   validateForm = e => {
@@ -81,28 +86,16 @@ class CreatePostForm extends React.Component {
     const { title, content, formError } = this.state;
 
     if (!formError) {
-      const formData = {
-        title: title.trim(),
-        content: content.toString("html")
-      };
-
       this.setState({ formError: false, sending: true });
 
       try {
-        const response = await fetch(`/posts/createPost`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(formData)
+        await this.blogPostRef.add({
+          title,
+          content: content.toString("html"),
+          datePublished: firebase.getServerTimestamp()
         });
-
-        if (response.ok) {
-          return this.props.history.push("/blog");
-        } else {
-          throw new Error("Could not create post");
-        }
+        this.setState({ sending: false });
+        return this.props.history.push("/blog");
       } catch (error) {
         this.setState({ sent: false, sending: false, error: error.message });
       }
@@ -163,4 +156,5 @@ class CreatePostForm extends React.Component {
   }
 }
 
-export default CreatePostForm;
+export { CreatePostForm };
+export default withRouter(CreatePostForm);

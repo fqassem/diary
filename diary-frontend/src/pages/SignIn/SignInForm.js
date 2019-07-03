@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
+
 import firebase from "../../firebase";
 import { BLOG } from '../../constants/routes';
 
@@ -83,13 +85,17 @@ class SignInForm extends React.Component {
           this.props.history.push(BLOG);
         })
         .catch(error => {
-          this.setState({ error });
+          if(error.code === "auth/wrong-password") {
+            this.setState({ sending: false,  error: 'Wrong Password' });
+          } else {
+            this.setState({sending: false, error: 'We couldnt sign you in. Please try again.'});
+          }
         });
     }
   };
 
   render() {
-    const { emailError, passwordError } = this.state;
+    const { emailError, passwordError, error, formError } = this.state;
     return (
       <form action="#">
         {emailError && <SignInError>Please enter a valid email</SignInError>}
@@ -118,15 +124,15 @@ class SignInForm extends React.Component {
 
         <div>
           <div>
-            {this.state.error && (
+            {error && (
               <SignInError>
-                An error occurred while signing you in. Please try again.
+                {error}
               </SignInError>
             )}
           </div>
 
-          {this.state.formError && (
-            <SignInError>Please fix the form errors above.</SignInError>
+          {formError && (
+            <SignInError>{formError}</SignInError>
           )}
           <div>
             <SubmitButton
@@ -142,4 +148,5 @@ class SignInForm extends React.Component {
   }
 }
 
-export default SignInForm;
+export { SignInForm }
+export default withRouter(SignInForm);

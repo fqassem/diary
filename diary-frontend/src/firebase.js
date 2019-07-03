@@ -1,4 +1,6 @@
-import * as firebaseAPI from "firebase";
+import * as firebaseApp from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -12,9 +14,13 @@ const firebaseConfig = {
 
 class Firebase {
   constructor() {
-    firebaseAPI.initializeApp(firebaseConfig);
-    this.auth = firebaseAPI.auth();
+    firebaseApp.initializeApp(firebaseConfig);
+    this.auth = firebaseApp.auth();
+    this.firestore = firebaseApp.firestore();
   }
+
+  getCollection = (collection) => this.firestore.collection(collection);
+  getServerTimestamp = () => firebaseApp.firestore.FieldValue.serverTimestamp();
 
   signIn = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
