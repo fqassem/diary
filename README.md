@@ -1,10 +1,22 @@
 # Diary - A Simple Personal Blog Publisher
 
-A simple personal blog entry publisher using a ~NodeJS backend~ Firebase backend, React frontend, and a rich text editor. ~Data is only persisted in the Node server's memory, so it's only meant for demo purposes.~ Data is persisted and retreived from Firebase. You must create a user and authorize yourself. Still a work in progress.
+A simple personal blog entry publisher using a ~NodeJS backend~ Firebase backend, React frontend, and a rich text editor. ~Data is only persisted in the Node server's memory, so it's only meant for demo purposes.~ Data is persisted and retreived from Firebase. You must create a user and authorize yourself to use the app. FYI it's still a work in progress and design is not finalized.
 
 ## Running the app
 
-- _cd_ into the _diary-frontend_ folder and _npm install_, then  _npm run start_ to start the front end dev server.
+In Firebase, create a new project and grab its configuration. You'll need an *.env* file that lives in the root of the app (at the same level as the *package.json*). It should look like this:
+
+~~~~
+REACT_APP_FIREBASE_API_KEY = "your_api_key"
+REACT_APP_FIREBASE_AUTH_DOMAIN = "your_auth_domain"
+REACT_APP_FIREBASE_DATABASE_URL = "your_database_url"
+REACT_APP_FIREBASE_PROJECT_ID = "your_project_id"
+REACT_APP_FIREBASE_STORAGE_BUCKET = "your_storage_bucket"
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID = "your_sender_id"
+REACT_APP_FIREBASE_APP_ID = "your_app_id"
+~~~~
+
+Once your config is done, _cd_ into the _diary-frontend_ folder and _npm install_, then  _npm run start_ to start the server.
 
 Navigate to localhost:8000 and start messing around.
 
