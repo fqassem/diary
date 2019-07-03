@@ -37,27 +37,25 @@ class Blog extends React.Component {
       error: null,
       loading: true
     };
-
-    this.postsRef = firebase.getCollection("posts");
   }
 
-  componentDidMount() {
-    this.postsRef
-      .get()
-      .then(querySnapshot => {
-        const allPosts = querySnapshot.docs.map(doc => {
-          return Object.assign({}, doc.data(), { id: doc.id });
-        });
+  async componentDidMount() {
+    console.log('ALL POSTS');
+    try {
+      const allPosts = await firebase.getPostsForCurrentUser();
+
+      if(allPosts) {
         this.setState({
           posts: allPosts
         });
-      })
-      .catch(error =>
-        this.setState({
-          error: error.toString()
-        })
-      )
-      .finally(() => this.setState({ loading: false }));
+      }
+    } catch (e) {
+      this.setState({
+        error: e.toString()
+      });
+    } finally{
+      this.setState({ loading: false })
+    }
   }
 
   render() {
@@ -66,8 +64,9 @@ class Blog extends React.Component {
       <BlogPostWrapper>
         <BlogPostTitle>My Diary</BlogPostTitle>
         {error && <div>{error}</div>}
-        { loading ? <div>Loading</div> : 
-        posts.length === 0 ? (
+        {loading ? (
+          <div>Loading</div>
+        ) : posts.length === 0 ? (
           <div>
             You have no posts! <Link to="/create">Write a Post</Link>
           </div>

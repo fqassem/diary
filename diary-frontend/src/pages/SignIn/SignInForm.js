@@ -110,7 +110,7 @@ class SignInForm extends React.Component {
         />
 
         {passwordError && (
-          <SignInError>Please enter a valid password greater than 6 characters</SignInError>
+          <SignInError>Your password is incorrect</SignInError>
         )}
         <SignInLabel htmlFor="password">Password</SignInLabel>
         <SignInInput

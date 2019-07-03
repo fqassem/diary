@@ -17,7 +17,7 @@ Navigate to localhost:8000 and start messing around.
 
 ## Todo
 
-* Create DB rules for user
+* ~Create DB rules for user~
 * Create HOC for user data for stuff like name, greetings, etc
 * Add delete and edit capability for posts
 * Add tests

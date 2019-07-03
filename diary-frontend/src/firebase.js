@@ -1,6 +1,6 @@
-import * as firebaseApp from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import * as firebaseApp from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -19,8 +19,42 @@ class Firebase {
     this.firestore = firebaseApp.firestore();
   }
 
-  getCollection = (collection) => this.firestore.collection(collection);
-  getServerTimestamp = () => firebaseApp.firestore.FieldValue.serverTimestamp();
+  getPostsForCurrentUser = async () => {
+    if (this.userPosts) {
+      return this.userPosts;
+    } else {
+      const posts = await this.firestore
+        .collection("users")
+        .doc(this.auth.currentUser.uid)
+        .collection("posts")
+        .get();
+      const formattedPosts = posts.docs.map(doc => {
+        return Object.assign({}, doc.data(), { id: doc.id });
+      });
+      return formattedPosts;
+    }
+  };
+
+  createPostForCurrentUser = ({ title, content }) =>
+    this.firestore
+      .collection("users")
+      .doc(this.auth.currentUser.uid)
+      .collection("posts")
+      .add({
+        title,
+        content,
+        datePublished: firebaseApp.firestore.FieldValue.serverTimestamp()
+      });
+
+  getAllPostsForUser = async () => {
+    const currentPosts = await this.getPostsForCurrentUser();
+    currentPosts.get().then(querySnapshot => {
+      const allPosts = querySnapshot.docs.map(doc => {
+        return Object.assign({}, doc.data(), { id: doc.id });
+      });
+      return allPosts;
+    });
+  };
 
   signIn = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);

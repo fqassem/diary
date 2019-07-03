@@ -56,8 +56,6 @@ class CreatePostForm extends React.Component {
       sending: false,
       error: null
     };
-
-    this.blogPostRef = firebase.getCollection("posts");
   }
 
   validateForm = e => {
@@ -89,11 +87,11 @@ class CreatePostForm extends React.Component {
       this.setState({ formError: false, sending: true });
 
       try {
-        await this.blogPostRef.add({
+        await firebase.createPostForCurrentUser({
           title,
           content: content.toString("html"),
-          datePublished: firebase.getServerTimestamp()
         });
+
         this.setState({ sending: false });
         return this.props.history.push("/blog");
       } catch (error) {
