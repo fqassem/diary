@@ -2,6 +2,7 @@
 import React from 'react';
 import validate from 'validate.js';
 import { withRouter } from "react-router-dom";
+import withSnackbar from '../../hoc/withSnackbar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -20,7 +21,7 @@ const INITIAL_STATE = {
 
   errors: null,
   sent: false,
-  sending: false,
+  sending: false
 };
 
 class SignUpForm extends React.Component {
@@ -59,10 +60,10 @@ class SignUpForm extends React.Component {
       await this.props.signUp(email, password);
       this.props.history.push(SIGN_IN);
     } catch (e) {
-      alert(e);
       this.setState({
-        errors: e
-      })
+        errors: e,
+      });
+      this.props.showSnackbar(e.message);
     } finally {
       this.setState({
         sending: false
@@ -131,4 +132,4 @@ class SignUpForm extends React.Component {
 }
 
 export { SignUpForm }
-export default withRouter(SignUpForm);
+export default withSnackbar(withRouter(SignUpForm));

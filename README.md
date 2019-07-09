@@ -1,6 +1,6 @@
 # Diary - A Simple Personal Blog Publisher
 
-A simple personal blog entry publisher using a ~NodeJS backend~ Firebase backend, React frontend, and a rich text editor. ~Data is only persisted in the Node server's memory, so it's only meant for demo purposes.~ Data is persisted and retreived from Firebase. You must create a user and authorize yourself to use the app. FYI it's still a work in progress and design is not finalized.
+A simple personal blog entry publisher using a ~NodeJS backend~ Firebase backend, React frontend, Styled-Components, Material UI, and a rich text editor. ~Data is only persisted in the Node server's memory, so it's only meant for demo purposes.~ Data is persisted and retreived from Firebase. You must create a user and authorize yourself to use the app. FYI it's still a work in progress and design is not finalized.
 
 ## Running the app
 
