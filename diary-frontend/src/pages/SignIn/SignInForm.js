@@ -1,149 +1,114 @@
-import React from "react";
-import styled from "styled-components";
+
+import React from 'react';
+import validate from 'validate.js';
 import { withRouter } from "react-router-dom";
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 
-import firebase from "../../firebase";
-import { BLOG } from '../../constants/routes';
-
-const SignInLabel = styled.label`
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-`;
-
-const SignInError = styled.p`
-  color: red;
-  margin: 1rem 0;
-`;
-
-const SignInInput = styled.input`
-  width: 100%;
-  margin-bottom: 1rem;
-
-  @media (min-width: 40em) {
-    min-width: 250px;
-    max-width: 600px;
-  }
-`;
-
-const SubmitButton = styled.input`
-  padding: 1rem;
-  border: 1px solid black;
-`;
+import constraints from '../../constraints';
 
 const INITIAL_STATE = {
   email: "",
-  emailError: false,
 
   password: "",
-  passwordError: false,
 
-  formError: false,
+  errors: false,
 
   sent: false,
   sending: false,
-  error: null
 };
 
 class SignInForm extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      ...INITIAL_STATE
-    };
+    this.state = INITIAL_STATE;
   }
 
-  validateForm = e => {
+  handleSignIn = (e) => {
     e.preventDefault();
     const { email, password } = this.state;
-    
-    // do some validation here
-    const emailError = email.length <= 0 || !email.includes("@");
-    const passwordError = password.length <= 6;
-    const formError = emailError || passwordError;
 
-    this.setState(
-      {
-        emailError,
-        passwordError,
-        formError
-      },
-      e => this.handleFormSubmit(e)
-    );
-  };
+    const errors = validate({
+      email,
+      password
+    }, {
+        email: constraints.email,
+        password: constraints.password
+      });
 
-  handleFormSubmit = async e => {
-    const { email, password, formError, error } = this.state;
-
-    if (!formError) {
-      this.setState({ formError: false, sending: true });
-
-      firebase
-        .signIn(email, password)
-        .then(() => {
-          this.props.history.push(BLOG);
-        })
-        .catch(error => {
-          if(error.code === "auth/wrong-password") {
-            this.setState({ sending: false,  error: 'Wrong Password' });
-          } else {
-            this.setState({sending: false, error: 'We couldnt sign you in. Please try again.'});
-          }
-        });
+    if (errors) {
+      this.setState({ errors });
+    } else {
+      this.setState({
+        errors: null,
+        sending: true
+      }, () => this.signInUser(email, password)
+      )
     }
-  };
+  }
+
+  signInUser = async (email, password) => {
+    try {
+      await this.props.signIn(email, password);
+    } catch(e) {
+      this.setState({
+        errors: e
+      })
+    } finally {
+      this.setState({
+        sending: false
+      })
+    }
+  }
 
   render() {
-    const { emailError, passwordError, error, formError } = this.state;
+    const { email, sending, password, errors } = this.state;
+
     return (
-      <form action="#">
-        {emailError && <SignInError>Please enter a valid email</SignInError>}
-        <SignInLabel htmlFor="email">Email</SignInLabel>
-        <SignInInput
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Email"
-          value={this.state.email}
-          onChange={e => this.setState({ email: e.target.value })}
-        />
-
-        {passwordError && (
-          <SignInError>Your password is incorrect</SignInError>
-        )}
-        <SignInLabel htmlFor="password">Password</SignInLabel>
-        <SignInInput
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
-          value={this.state.password}
-          onChange={e => this.setState({ password: e.target.value })}
-        />
-
+      <Container component="main" maxWidth="xs">
         <div>
-          <div>
-            {error && (
-              <SignInError>
-                {error}
-              </SignInError>
-            )}
-          </div>
-
-          {formError && (
-            <SignInError>{formError}</SignInError>
-          )}
-          <div>
-            <SubmitButton
-              type="submit"
-              onClick={e => this.validateForm(e)}
-              value="Send"
-              disabled={this.state.sending || this.state.sent || this.formError}
+          <Avatar>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+        </Typography>
+          <form>
+            <TextField
+              autoComplete="email"
+              error={!!(errors && errors.email)}
+              fullWidth
+              helperText={(errors && errors.email) ? errors.email[0] : ''}
+              margin="normal"
+              onChange={e => this.setState({ email: e.target.value })}
+              placeholder="E-mail address"
+              required
+              type="email"
+              value={email}
             />
+
+            <TextField
+              autoComplete="current-password"
+              error={!!(errors && errors.password)}
+              fullWidth
+              helperText={(errors && errors.password) ? errors.password[0] : ''}
+              margin="normal"
+              onChange={e => this.setState({ password: e.target.value })}
+              placeholder="Password"
+              required
+              type="password"
+              value={password}
+            />
+          </form>
+          <div>
+            <Button color="primary" disabled={(!email || !password) || sending} variant="contained" onClick={this.handleSignIn}>Sign In</Button>
           </div>
         </div>
-      </form>
+      </Container>
     );
   }
 }

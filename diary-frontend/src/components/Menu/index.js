@@ -1,56 +1,134 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
 
-import styled from "styled-components";
-import * as routes from "../../constants/routes";
+import PropTypes from 'prop-types';
 
-const MenuWrapper = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  text-align: right;
-`;
-const MenuList = styled.ul`
-  list-style-type: none;
-`;
-const MenuItem = styled.li`
-  display: inline-block;
-  margin: 1rem;
-`;
+import {
+  withRouter
+} from "react-router-dom";
 
-const SignOutButton = ({ onClick }) => (
-  <button type="button" onClick={onClick}>
-    Sign Out
-  </button>
-);
+import { withStyles } from '@material-ui/core/styles';
 
-const Menu = ({ authUser, onSignOut }) => (
-  <MenuWrapper>
-    <MenuList>
-      {!authUser && (
-        <>
-          <MenuItem>
-            <Link to={routes.HOME}>Home</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to={routes.SIGN_IN}>Sign In</Link>
-          </MenuItem>
-        </>
-      )}
-      {authUser && (
-        <>
-          <MenuItem>
-            <Link to={routes.BLOG}>Blog</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to={routes.CREATE}>Create Post</Link>
-          </MenuItem>
-          <MenuItem>
-            <SignOutButton onClick={onSignOut} />
-          </MenuItem>
-        </>
-      )}
-    </MenuList>
-  </MenuWrapper>
-);
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@material-ui/core/Avatar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
-export default Menu;
+import PersonIcon from '@material-ui/icons/Person';
+
+import * as routes from '../../constants/routes';
+
+const styles = (theme) => ({
+  signUpButton: {
+    marginRight: theme.spacing(1)
+  }
+});
+
+class Bar extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      menu: {
+        anchorEl: null
+      }
+    };
+  }
+
+  openMenu = (event) => {
+    const anchorEl = event.currentTarget;
+
+    this.setState({
+      menu: {
+        anchorEl
+      }
+    });
+  };
+
+  closeMenu = () => {
+    this.setState({
+      menu: {
+        anchorEl: null
+      }
+    });
+  };
+
+  handleSignOutClick = () => {
+    this.closeMenu();
+    this.props.onSignOutClick();
+  };
+
+  toCreatePost = () => {
+    this.props.history.push(routes.CREATE);
+  }
+
+  toBlog = () => {
+    this.props.history.push(routes.BLOG);
+  }
+
+  onSignInClick = () => {
+    this.props.history.push(routes.SIGN_IN);
+  }
+
+  onSignUpClick = () => {
+    this.props.history.push(routes.SIGN_UP);
+  }
+
+  render() {
+    // Styling
+    const { classes } = this.props;
+
+    // Properties
+    const { title, isPerformingAuthAction, isSignedIn, user } = this.props;
+
+    const { menu } = this.state;
+
+    return (
+      <AppBar color="primary" position="static">
+        <Toolbar variant="regular">
+          <Typography style={{ flexGrow: 1 }} color="inherit" variant="h6">{title}</Typography>
+
+          {isSignedIn &&
+            <React.Fragment>
+              <IconButton color="inherit" disabled={isPerformingAuthAction} onClick={this.openMenu}>
+                {user.photoURL ? <Avatar alt="Avatar" src={user.photoURL} /> : <PersonIcon />}
+              </IconButton>
+
+              <Menu anchorEl={menu.anchorEl} open={Boolean(menu.anchorEl)} onClose={this.closeMenu}>
+
+                <MenuItem disabled={isPerformingAuthAction} onClick={this.toBlog}>Blog</MenuItem>
+                <MenuItem disabled={isPerformingAuthAction} onClick={this.toCreatePost}>Create Post</MenuItem>
+
+                <MenuItem disabled={isPerformingAuthAction} onClick={this.handleSettingsClick}>Settings</MenuItem>
+                <MenuItem disabled={isPerformingAuthAction} onClick={this.handleSignOutClick}>Sign out</MenuItem>
+              </Menu>
+            </React.Fragment>
+          }
+
+          {!isSignedIn &&
+            <React.Fragment>
+              <Button className={classes.signUpButton} color="secondary" disabled={isPerformingAuthAction} variant="contained" onClick={this.onSignUpClick}>Sign Up</Button>
+              <Button color="secondary" disabled={isPerformingAuthAction} variant="contained" onClick={this.onSignInClick}>Sign In</Button>
+            </React.Fragment>
+          }
+        </Toolbar>
+      </AppBar>
+    );
+  }
+}
+
+Bar.propTypes = {
+  classes: PropTypes.object.isRequired,
+
+  title: PropTypes.string.isRequired,
+  isPerformingAuthAction: PropTypes.bool.isRequired,
+  isSignedIn: PropTypes.bool.isRequired,
+
+  onSettingsClick: PropTypes.func.isRequired,
+  onSignOutClick: PropTypes.func.isRequired,
+};
+
+export default withRouter(withStyles(styles)(Bar));

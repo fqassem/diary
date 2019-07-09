@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-import { SIGN_UP } from "../../constants/routes";
+import firebase from "../../firebase";
+
+import { BLOG, SIGN_UP } from "../../constants/routes";
 import SignInForm from "./SignInForm";
 
 const SignInWrapper = styled.div`
@@ -18,6 +20,15 @@ const SignInTitle = styled.h2`
 `;
 
 class SignIn extends React.Component {
+  signIn = async (email, password) => {
+     try {
+       await firebase.signIn(email, password);
+        this.props.history.push(BLOG);
+     } catch(e) {
+       throw new Error(e);
+     }
+  };
+
   render() {
     return (
       <SignInWrapper>
@@ -25,7 +36,7 @@ class SignIn extends React.Component {
         <div>
           Don't have an account? <Link to={SIGN_UP}>Create one!</Link>
         </div>
-        <SignInForm />
+        <SignInForm signIn={this.signIn} />
       </SignInWrapper>
     );
   }
