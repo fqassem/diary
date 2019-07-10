@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,6 +9,7 @@ import {
   Redirect,
 } from "react-router-dom";
 
+import LoadingScreen from './components/LoadingScreen';
 import firebase from "./firebase";
 import * as routes from "./constants/routes";
 import { SignIn, SignUp, Home, Blog, CreatePost, NotFound } from "./pages";
@@ -101,6 +103,10 @@ class App extends React.Component {
              onSignOutClick={firebase.signOut} 
             />
           </Header>
+          {!isAuthReady &&
+      <LoadingScreen  />
+    }
+    {isAuthReady &&
           <Switch>
             <RedirectIfAuthed
               exact
@@ -132,6 +138,7 @@ class App extends React.Component {
             />
             <Route component={NotFound} />
           </Switch>
+    }
         </SiteContainer>
       </Router>
     );

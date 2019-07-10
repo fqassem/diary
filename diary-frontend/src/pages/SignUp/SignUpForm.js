@@ -9,10 +9,40 @@ import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import withStyles from '@material-ui/core/styles/withStyles'
 
 import { SIGN_IN } from "../../constants/routes";
 
 import constraints from '../../constraints';
+
+const styles = theme => ({
+  main: {
+      width: 'auto',
+      display: 'block',
+      margin: '0 auto'
+  },
+  paper: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      marginTop: theme.spacing.unit * 2,
+      padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+  },
+  avatar: {
+      margin: theme.spacing.unit,
+      backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+      width: '100%',
+      marginTop: theme.spacing.unit,
+  },
+  submit: {
+      marginTop: theme.spacing.unit * 2,
+  },
+  resetPassword: {
+    marginTop: theme.spacing.unit * 2
+  }
+});
 
 const INITIAL_STATE = {
   email: "",
@@ -73,17 +103,15 @@ class SignUpForm extends React.Component {
 
   render() {
     const { email, password, confirmPassword, sending, errors } = this.state;
+    const { classes } = this.props;
 
     return (
-      <Container component="main" maxWidth="xs">
-        <div>
-          <Avatar>
+      <Container component="main" maxWidth="xs" className={classes.main}>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign Up
-          </Typography>
-          <form>
+          <form className={classes.form}>
             <TextField
               autoComplete="email"
               error={!!(errors && errors.email)}
@@ -123,7 +151,7 @@ class SignUpForm extends React.Component {
             />
           </form>
           <div>
-            <Button color="primary" disabled={(!email || !password || !confirmPassword) || sending} variant="contained" onClick={this.handleSignUp}>Sign Up</Button>
+            <Button color="primary" disabled={(!email || !password || !confirmPassword) || sending} variant="contained" onClick={this.handleSignUp} className={classes.submit}>Sign Up</Button>
           </div>
         </div>
       </Container>
@@ -132,4 +160,4 @@ class SignUpForm extends React.Component {
 }
 
 export { SignUpForm }
-export default withSnackbar(withRouter(SignUpForm));
+export default withStyles(styles)(withSnackbar(withRouter(SignUpForm)));

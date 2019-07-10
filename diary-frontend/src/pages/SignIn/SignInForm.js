@@ -43,7 +43,6 @@ const styles = theme => ({
   }
 });
 
-
 const INITIAL_STATE = {
   email: "",
 

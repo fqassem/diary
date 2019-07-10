@@ -22,6 +22,9 @@ import PersonIcon from '@material-ui/icons/Person';
 import * as routes from '../../constants/routes';
 
 const styles = (theme) => ({
+  homeButton: {
+    marginRight: theme.spacing(1)
+  },
   signUpButton: {
     marginRight: theme.spacing(1)
   }
@@ -69,6 +72,10 @@ class Bar extends Component {
     this.props.history.push(routes.BLOG);
   }
 
+  toHome = () => {
+    this.props.history.push(routes.HOME);
+  }
+
   onSignInClick = () => {
     this.props.history.push(routes.SIGN_IN);
   }
@@ -109,6 +116,7 @@ class Bar extends Component {
 
           {!isSignedIn &&
             <React.Fragment>
+              <Button className={classes.homeButton} color="primary" variant="contained" onClick={this.toHome}>Home</Button>
               <Button className={classes.signUpButton} color="secondary"  variant="contained" onClick={this.onSignUpClick}>Sign Up</Button>
               <Button color="secondary" variant="contained" onClick={this.onSignInClick}>Sign In</Button>
             </React.Fragment>
