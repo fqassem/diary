@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import {
@@ -9,24 +9,13 @@ import {
   Redirect,
 } from "react-router-dom";
 
+import Footer from './components/Footer';
 import LoadingScreen from './components/LoadingScreen';
 import firebase from "./firebase";
 import * as routes from "./constants/routes";
 import { SignIn, SignUp, Home, Blog, CreatePost, NotFound } from "./pages";
 
 import Menu from "./components/Menu";
-
-const SiteContainer = styled.div`
-  display: grid;
-  grid-gap: 1rem 4rem;
-  padding: 1.5rem 1rem;
-  margin: 0 auto;
-  grid-template-columns: 1fr;
-
-  max-width: 60em;
-`;
-
-const Header = styled.header``;
 
 const AuthenticatedRoute = ({ component: Component, user, ...rest }) => (
   <Route
@@ -95,51 +84,52 @@ class App extends React.Component {
     return (
       <Router>
         <CssBaseline />
-        <SiteContainer>
-          <Header>
-            <Menu title={"Diary"} 
-             isSignedIn={isSignedIn} 
-             user={user}
-             onSignOutClick={firebase.signOut} 
-            />
-          </Header>
+        <Menu
+            isSignedIn={isSignedIn}
+            user={user}
+            onSignOutClick={firebase.signOut}
+          />
+        <Container>
           {!isAuthReady &&
-      <LoadingScreen  />
-    }
-    {isAuthReady &&
-          <Switch>
-            <RedirectIfAuthed
-              exact
-              user={user}
-              path={routes.HOME}
-              component={Home}
-            />
-            <RedirectIfAuthed
-              exact
-              user={user}
-              path={routes.SIGN_IN}
-              component={SignIn}
-            />
-            <RedirectIfAuthed
-              exact
-              user={user}
-              path={routes.SIGN_UP}
-              component={SignUp}
-            />
-            <AuthenticatedRoute
-              user={user}
-              path={routes.BLOG}
-              component={Blog}
-            />
-            <AuthenticatedRoute
-              user={user}
-              path={routes.CREATE}
-              component={CreatePost}
-            />
-            <Route component={NotFound} />
-          </Switch>
-    }
-        </SiteContainer>
+            <LoadingScreen />
+          }
+          {isAuthReady &&
+            <>
+              <Switch>
+                <RedirectIfAuthed
+                  exact
+                  user={user}
+                  path={routes.HOME}
+                  component={Home}
+                />
+                <RedirectIfAuthed
+                  exact
+                  user={user}
+                  path={routes.SIGN_IN}
+                  component={SignIn}
+                />
+                <RedirectIfAuthed
+                  exact
+                  user={user}
+                  path={routes.SIGN_UP}
+                  component={SignUp}
+                />
+                <AuthenticatedRoute
+                  user={user}
+                  path={routes.BLOG}
+                  component={Blog}
+                />
+                <AuthenticatedRoute
+                  user={user}
+                  path={routes.CREATE}
+                  component={CreatePost}
+                />
+                <Route component={NotFound} />
+              </Switch>
+            </>
+          }
+        </Container>
+        <Footer />
       </Router>
     );
   }

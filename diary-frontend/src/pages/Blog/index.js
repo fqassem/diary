@@ -1,23 +1,14 @@
 import React from "react";
-import styled from "styled-components";
 import { Link } from "react-router-dom";
+
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+
 import firebase from "../../firebase";
 import BlogPost from "../../components/BlogPost";
-
-const BlogPostWrapper = styled.div``;
-
-const BlogPostTitle = styled.h2`
-  text-align: center;
-`;
-
-const BlogPostList = styled.ul`
-  list-style-type: none;
-  padding-left: 0;
-
-  li {
-    margin: 2rem;
-  }
-`;
 
 const formatDate = timestamp => {
   return timestamp.toDate().toLocaleDateString("en-EN", {
@@ -61,8 +52,8 @@ class Blog extends React.Component {
   render() {
     const { posts, error, loading } = this.state;
     return (
-      <BlogPostWrapper>
-        <BlogPostTitle>My Diary</BlogPostTitle>
+      <Grid>
+        <Typography component="h1" variant="h3">My Diary</Typography>
         {error && <div>{error}</div>}
         {loading ? (
           <div>Loading</div>
@@ -71,22 +62,23 @@ class Blog extends React.Component {
             You have no posts! <Link to="/create">Write a Post</Link>
           </div>
         ) : (
-          <BlogPostList>
+          <List>
             {/* // Index is fine as key since this list doesn't change except when remounted */}
             {posts.map((post, idx) => (
-              <li key={idx}>
+              <ListItem key={idx}>
                 <BlogPost
                   title={post.title}
-                  content={post.content}
+                  content={post.content}F
                   datePublished={
                     post.timestamp ? formatDate(post.timestamp) : "..."
                   }
                 />
-              </li>
+              <Divider variant="inset" component="li" />
+              </ListItem>
             ))}
-          </BlogPostList>
+          </List>
         )}
-      </BlogPostWrapper>
+      </Grid>
     );
   }
 }

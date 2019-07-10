@@ -7,8 +7,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 import withStyles from '@material-ui/core/styles/withStyles'
 
 import { SIGN_IN } from "../../constants/routes";
@@ -19,7 +18,9 @@ const styles = theme => ({
   main: {
       width: 'auto',
       display: 'block',
-      margin: '0 auto'
+      margin: '0 auto',
+      maxWidth: '500px',
+      minHeight: '100vh'
   },
   paper: {
       display: 'flex',
@@ -106,7 +107,7 @@ class SignUpForm extends React.Component {
     const { classes } = this.props;
 
     return (
-      <Container component="main" maxWidth="xs" className={classes.main}>
+      <Grid container component="main" maxWidth="xs" className={classes.main}>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
@@ -154,7 +155,7 @@ class SignUpForm extends React.Component {
             <Button color="primary" disabled={(!email || !password || !confirmPassword) || sending} variant="contained" onClick={this.handleSignUp} className={classes.submit}>Sign Up</Button>
           </div>
         </div>
-      </Container>
+      </Grid>
     );
   }
 }

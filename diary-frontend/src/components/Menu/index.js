@@ -22,12 +22,10 @@ import PersonIcon from '@material-ui/icons/Person';
 import * as routes from '../../constants/routes';
 
 const styles = (theme) => ({
-  homeButton: {
-    marginRight: theme.spacing(1)
-  },
-  signUpButton: {
-    marginRight: theme.spacing(1)
-  }
+ button: {
+   textTransform: 'none',
+   fontWeight: '500',
+ }
 });
 
 class Bar extends Component {
@@ -89,12 +87,12 @@ class Bar extends Component {
     const { classes } = this.props;
 
     // Properties
-    const { title, isPerformingAuthAction, isSignedIn, user } = this.props;
+    const { title, isSignedIn, user } = this.props;
 
     const { menu } = this.state;
 
     return (
-      <AppBar color="primary" position="static">
+      <AppBar color="transparent" position="static" style={{boxShadow: 'none'}} >
         <Toolbar variant="regular">
           <Typography style={{ flexGrow: 1 }} color="inherit" variant="h6">{title}</Typography>
 
@@ -116,9 +114,9 @@ class Bar extends Component {
 
           {!isSignedIn &&
             <React.Fragment>
-              <Button className={classes.homeButton} color="primary" variant="contained" onClick={this.toHome}>Home</Button>
-              <Button className={classes.signUpButton} color="secondary"  variant="contained" onClick={this.onSignUpClick}>Sign Up</Button>
-              <Button color="secondary" variant="contained" onClick={this.onSignInClick}>Sign In</Button>
+              <Button className={classes.button} onClick={this.toHome}>Home</Button>
+              <Button className={classes.button} onClick={this.onSignUpClick}>Sign Up</Button>
+              <Button className={classes.button} onClick={this.onSignInClick}>Sign In</Button>
             </React.Fragment>
           }
         </Toolbar>
@@ -131,7 +129,6 @@ Bar.propTypes = {
   classes: PropTypes.object.isRequired,
 
   title: PropTypes.string.isRequired,
-  isPerformingAuthAction: PropTypes.bool.isRequired,
   isSignedIn: PropTypes.bool.isRequired,
 
   onSignOutClick: PropTypes.func.isRequired,
