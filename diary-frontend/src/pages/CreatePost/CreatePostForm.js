@@ -87,14 +87,16 @@ class CreatePostForm extends React.Component {
       this.setState({ formError: false, sending: true });
 
       try {
-        await firebase.createPostForCurrentUser({
+       let magic = await firebase.createPostForCurrentUser({
           title,
           content: content.toString("html"),
         });
-
+console.log(magic);
+        
         this.setState({ sending: false });
         return this.props.history.push("/blog");
       } catch (error) {
+        alert(error);
         this.setState({ sent: false, sending: false, error: error.message });
       }
     }

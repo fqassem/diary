@@ -15,28 +15,27 @@ const firebaseConfig = {
 class Firebase {
   constructor() {
     firebaseApp.initializeApp(firebaseConfig);
+
     this.auth = firebaseApp.auth();
     this.firestore = firebaseApp.firestore();
   }
 
   getPostsForCurrentUser = async () => {
-    if (this.userPosts) {
-      return this.userPosts;
-    } else {
-      const posts = await this.firestore
-        .collection("users")
-        .doc(this.auth.currentUser.uid)
-        .collection("posts")
-        .get();
-      const formattedPosts = posts.docs.map(doc => {
-        return Object.assign({}, doc.data(), { id: doc.id });
-      });
-      return formattedPosts;
-    }
-  };
+    const posts = await this.firestore
+      .collection("users")
+      .doc(this.auth.currentUser.uid)
+      .collection("posts")
+      .get();
 
-  createPostForCurrentUser = ({ title, content }) =>
-    this.firestore
+    const formattedPosts = posts.docs.map(doc => {
+      return Object.assign({}, doc.data(), { id: doc.id });
+    });
+    
+    return formattedPosts;
+  }
+
+  createPostForCurrentUser = ({ title, content }) => {
+    return this.firestore
       .collection("users")
       .doc(this.auth.currentUser.uid)
       .collection("posts")
@@ -45,15 +44,20 @@ class Firebase {
         content,
         datePublished: firebaseApp.firestore.FieldValue.serverTimestamp()
       });
+  }
 
-  getAllPostsForUser = async () => {
-    const currentPosts = await this.getPostsForCurrentUser();
-    currentPosts.get().then(querySnapshot => {
-      const allPosts = querySnapshot.docs.map(doc => {
-        return Object.assign({}, doc.data(), { id: doc.id });
+  getAllPostsForUser = () => {
+    try {
+      const currentPosts = this.getPostsForCurrentUser();
+      currentPosts.get().then(querySnapshot => {
+        const allPosts = querySnapshot.docs.map(doc => {
+          return Object.assign({}, doc.data(), { id: doc.id });
+        });
+        return allPosts;
       });
-      return allPosts;
-    });
+    } catch (e) {
+      throw new Error(e.message);
+    }
   };
 
   signIn = (email, password) =>

@@ -40,9 +40,9 @@ class Blog extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('ALL POSTS');
     try {
       const allPosts = await firebase.getPostsForCurrentUser();
+      console.log(allPosts);
 
       if(allPosts) {
         this.setState({
@@ -53,7 +53,7 @@ class Blog extends React.Component {
       this.setState({
         error: e.toString()
       });
-    } finally{
+    } finally {
       this.setState({ loading: false })
     }
   }

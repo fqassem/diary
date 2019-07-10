@@ -93,25 +93,24 @@ class Bar extends Component {
 
           {isSignedIn &&
             <React.Fragment>
-              <IconButton color="inherit" disabled={isPerformingAuthAction} onClick={this.openMenu}>
+              <IconButton color="inherit" onClick={this.openMenu}>
                 {user.photoURL ? <Avatar alt="Avatar" src={user.photoURL} /> : <PersonIcon />}
               </IconButton>
 
               <Menu anchorEl={menu.anchorEl} open={Boolean(menu.anchorEl)} onClose={this.closeMenu}>
 
-                <MenuItem disabled={isPerformingAuthAction} onClick={this.toBlog}>Blog</MenuItem>
-                <MenuItem disabled={isPerformingAuthAction} onClick={this.toCreatePost}>Create Post</MenuItem>
+                <MenuItem onClick={this.toBlog}>Blog</MenuItem>
+                <MenuItem onClick={this.toCreatePost}>Create Post</MenuItem>
 
-                <MenuItem disabled={isPerformingAuthAction} onClick={this.handleSettingsClick}>Settings</MenuItem>
-                <MenuItem disabled={isPerformingAuthAction} onClick={this.handleSignOutClick}>Sign out</MenuItem>
+                <MenuItem onClick={this.handleSignOutClick}>Sign out</MenuItem>
               </Menu>
             </React.Fragment>
           }
 
           {!isSignedIn &&
             <React.Fragment>
-              <Button className={classes.signUpButton} color="secondary" disabled={isPerformingAuthAction} variant="contained" onClick={this.onSignUpClick}>Sign Up</Button>
-              <Button color="secondary" disabled={isPerformingAuthAction} variant="contained" onClick={this.onSignInClick}>Sign In</Button>
+              <Button className={classes.signUpButton} color="secondary"  variant="contained" onClick={this.onSignUpClick}>Sign Up</Button>
+              <Button color="secondary" variant="contained" onClick={this.onSignInClick}>Sign In</Button>
             </React.Fragment>
           }
         </Toolbar>
@@ -127,7 +126,6 @@ Bar.propTypes = {
   isPerformingAuthAction: PropTypes.bool.isRequired,
   isSignedIn: PropTypes.bool.isRequired,
 
-  onSettingsClick: PropTypes.func.isRequired,
   onSignOutClick: PropTypes.func.isRequired,
 };
 

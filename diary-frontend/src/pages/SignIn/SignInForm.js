@@ -1,15 +1,48 @@
 
 import React from 'react';
 import validate from 'validate.js';
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import withStyles from '@material-ui/core/styles/withStyles'
 
+import {SIGN_UP} from '../../constants/routes';
+import withSnackbar from '../../hoc/withSnackbar';
 import constraints from '../../constraints';
+
+const styles = theme => ({
+  main: {
+      width: 'auto',
+      display: 'block',
+      margin: '0 auto'
+  },
+  paper: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      marginTop: theme.spacing.unit * 2,
+      padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+  },
+  avatar: {
+      margin: theme.spacing.unit,
+      backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+      width: '100%',
+      marginTop: theme.spacing.unit,
+  },
+  submit: {
+      marginTop: theme.spacing.unit * 2,
+  },
+  createAccount: {
+    marginTop: theme.spacing.unit * 2
+  }
+});
+
 
 const INITIAL_STATE = {
   email: "",
@@ -57,27 +90,26 @@ class SignInForm extends React.Component {
     } catch(e) {
       this.setState({
         errors: e
-      })
+      });
+      this.props.showSnackbar(e.message);
     } finally {
       this.setState({
         sending: false
-      })
+      });
     }
   }
 
   render() {
     const { email, sending, password, errors } = this.state;
+    const { classes } = this.props;
 
     return (
-      <Container component="main" maxWidth="xs">
-        <div>
-          <Avatar>
+      <Container component="main" maxWidth="xs" className={classes.main}>
+        <div className={classes.paper}>
+          <Avatar className={styles.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-        </Typography>
-          <form>
+          <form className={classes.form}>
             <TextField
               autoComplete="email"
               error={!!(errors && errors.email)}
@@ -105,13 +137,16 @@ class SignInForm extends React.Component {
             />
           </form>
           <div>
-            <Button color="primary" disabled={(!email || !password) || sending} variant="contained" onClick={this.handleSignIn}>Sign In</Button>
+            <Button color="primary" disabled={(!email || !password) || sending} variant="contained" onClick={this.handleSignIn} className={classes.submit}>Sign In</Button>
           </div>
+          <Typography className={classes.createAccount} variant="subtitle1">
+            Don't have an account? <Link to={SIGN_UP}>Create one here!</Link>
+          </Typography>
         </div>
       </Container>
     );
   }
 }
 
-export { SignInForm }
-export default withRouter(SignInForm);
+export { SignInForm };
+export default withStyles(styles)(withSnackbar(withRouter(SignInForm)));
