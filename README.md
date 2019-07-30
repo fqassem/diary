@@ -2,7 +2,7 @@
 
 A simple personal blog entry publisher using a NodeJS backend, React frontend, and a rich text editor. Data is only persisted in the Node server's memory, so it's only meant for demo purposes.
 
-There's a second branch, called [firebase](https://github.com/fqassem/diary/tree/firebase), where I got rid of the Node.js backend and used Firebases' Cloud Firestore to persist the data, as well as email/password user authentication! Will eventually deprecate the Node server in favor of firebase.
+There's a second branch, called [firebase](https://github.com/fqassem/diary/tree/firebase), where I got rid of the Node.js backend and used Firebase's Cloud Firestore to persist the data, as well as email/password user authentication! I'll eventually deprecate the Node server in favor of firebase.
 
 ## Running the app
 
